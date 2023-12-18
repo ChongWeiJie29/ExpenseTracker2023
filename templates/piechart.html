@@ -1,0 +1,22 @@
+<div>
+    <div align="center" id="piechart"></div>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+        google.charts.load('current', {'packages':['corechart']});
+        google.charts.setOnLoadCallback(drawChart);
+
+        function drawChart() {
+            var data = google.visualization.arrayToDataTable(JSON.parse(
+                "{{ userCategoryAmountArray }}".replace(/&#39;/g, "\""))
+                );
+
+        var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+        chart.draw(data,
+            {'title':'My Expenses',
+            'width':550,
+            'height':400,
+            'legend': {alignment: 'center',position: 'top'}
+            });
+        }
+    </script>
+</div>

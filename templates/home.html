@@ -1,0 +1,54 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Home
+{% endblock %}
+
+{% block body %}
+    <div class="container d-flex justify-content-center">
+        <div class="col-md-8">
+            <h2>Home Page</h2>
+
+            {% if userTransactions %}
+                <table class="table table-responsive table-striped">
+                    <tr>
+                        <th>Date of Transaction</th>
+                        <th>Item Category</th>
+                        <th>Item Description</th>
+                        <th>Inflow</th>
+                        <th>Outflow</th>
+                    </tr>
+                    {% for row in userTransactions %}
+                        <tr>
+                            <td>{{ row["date"] }}/{{ row["month"] }}/{{ row["year"] }}</td>
+                            <td>{{ row["type"] }}</td>
+                            <td>{{ row["description"] }}</td>
+                            {% if row["amount"]|float > 0 %}
+                                <td class="text-success">{{ row["amount"] }}</td>
+                                <td></td>
+                            {% else %}
+                                <td></td>
+                                <td class="text-danger">{{ row["amount"] }}</td>
+                            {% endif %}
+                        </tr>
+                    {% endfor %}
+                    <tr>
+                        <td colspan="3"></td>
+                        <td><strong>Total Spending:</strong></td>
+                        <td class="text-danger"><strong>{{ totalSpending }}</strong></td>
+                    </tr>
+                    <tr>
+                        <td colspan="3"></td>
+                        <td><strong>Account Balance:</strong></td>
+                        <td class="text-success"><strong>{{ userCash }}</strong></td>
+                    </tr>
+                </table>
+                {% with userTransactions=userTransactions %}
+                    {% include "piechart.html" %}
+                {% endwith %}
+            {% else %}
+                <p class="text-center">Get started with your first transaction</p>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,63 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Inflow
+{% endblock %}
+
+{% block body %}
+    <div class="container d-flex justify-content-center">
+        {% if not userTransactions %}
+            <div class="col-md-6">
+                <form action="/past" method="post">
+                    <h2>View Your Past Transactions</h2>
+                    <label for="month" class="form-label">Month:</label>
+                    <select class="form-select" id="month" name="month" required>
+                        <option selected value="">Select a Month!</option>
+                        {% for option in monthList %}
+                            <option value="{{ option }}">{{ option }}</option>
+                        {% endfor %}
+                    </select>
+                    <br>
+                    <label for="year" class="form-label">Year:</label>
+                    <select class="form-select" id="year" name="year" required>
+                        <option selected>Select a Year!</option>
+                        {% for option in yearList %}
+                            <option value="{{ option }}">{{ option }}</option>
+                        {% endfor %}
+                    </select>
+                    <br>
+                    <button type="submit" class="btn btn-primary col-12">View Transactions</button>
+                </form>
+            </div>
+        {% else %}
+            <table class="table table-responsive table-striped">
+                <tr>
+                    <th>Date of Transaction</th>
+                    <th>Item Category</th>
+                    <th>Item Description</th>
+                    <th>Inflow</th>
+                    <th>Outflow</th>
+                </tr>
+                {% for row in userTransactions %}
+                    <tr>
+                        <td>{{ row["date"] }}/{{ row["month"] }}/{{ row["year"] }}</td>
+                        <td>{{ row["type"] }}</td>
+                        <td>{{ row["description"] }}</td>
+                        {% if row["amount"]|float > 0 %}
+                            <td class="text-success">{{ row["amount"] }}</td>
+                            <td></td>
+                        {% else %}
+                            <td></td>
+                            <td class="text-danger">{{ row["amount"] }}</td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+                <tr>
+                    <td colspan="3"></td>
+                    <td><strong>Total Spending:</strong></td>
+                    <td class="text-danger"><strong>{{ totalSpending }}</strong></td>
+                </tr>
+            </table>
+        {%  endif %}
+    </div>
+{% endblock %}
